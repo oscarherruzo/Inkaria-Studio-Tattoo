@@ -97,11 +97,21 @@ const chartInstances = {};
 
 /* ─── LOGIN ──────────────────────────────────────────────── */
 const AUTH = {
-  _u:atob('SW5rYXJpYQ=='), _p:atob('SW5rYXJpYVRhdHRvbzIwMjZNYXJpYQ=='),
-  isLogged:()=>sessionStorage.getItem('ink_auth')==='1',
-  login:()=>sessionStorage.setItem('ink_auth','1'),
-  logout:()=>{ sessionStorage.removeItem('ink_auth'); location.reload(); },
-  check:(u,p)=>u===AUTH._u&&p===AUTH._p,
+  // Credenciales verificadas por hash — no hay texto plano en el código
+  _hu: 1877683247,   // hash de usuario
+  _hp: 3952069709,   // hash de contraseña
+  isLogged: () => sessionStorage.getItem('ink_auth') === '1',
+  login:    () => sessionStorage.setItem('ink_auth', '1'),
+  logout:   () => { sessionStorage.removeItem('ink_auth'); location.reload(); },
+  hash: s => {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = (h * 0x01000193) >>> 0;
+    }
+    return h;
+  },
+  check: (u, p) => AUTH.hash(u) === AUTH._hu && AUTH.hash(p) === AUTH._hp,
 };
 
 function initLogin(){
