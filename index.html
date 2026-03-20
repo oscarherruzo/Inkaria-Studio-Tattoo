@@ -249,47 +249,27 @@
        TAB 2 — DASHBOARD ANUAL
   ══════════════════════════════════════════ -->
   <section id="tab-dashboard" class="tab-panel">
-    <div id="dashboard-content">
-      <!-- KPIs -->
-      <div class="grid-3" style="margin-bottom:16px;">
-        <div class="metric-box">
-          <div class="metric-label">Gasto Anual Total</div>
-          <div class="metric-value" id="dash-total">—</div>
-        </div>
-        <div class="metric-box">
-          <div class="metric-label">Media Mensual</div>
-          <div class="metric-value" id="dash-media">—</div>
-        </div>
-        <div class="metric-box">
-          <div class="metric-label">Mes Más Caro</div>
-          <div class="metric-value sm" id="dash-mes-caro">—</div>
-          <div class="metric-value" id="dash-gasto-top" style="font-size:1.8rem;line-height:1;">—</div>
-        </div>
-      </div>
-
-      <div class="grid-16">
-        <!-- Barras mensuales -->
-        <div class="card">
-          <div class="card-label">📊 Gasto por Mes</div>
-          <div class="chart-wrap"><canvas id="bar-anual" height="320"></canvas></div>
-        </div>
-        <!-- Donut anual -->
-        <div class="card">
-          <div class="card-label">🍩 Por Categoría (anual)</div>
-          <div class="donut-wrap"><canvas id="donut-anual" height="260"></canvas></div>
-          <div id="donut-anual-leyenda" style="margin-top:8px;"></div>
-        </div>
-      </div>
-
-      <!-- Top 5 -->
-      <div class="card">
-        <div class="card-label">🏆 Top 5 Productos Más Gastados</div>
-        <div id="top5-list"></div>
-      </div>
-
-      <button class="btn btn-secondary" id="btn-export-anual" style="width:auto">⬇️ &nbsp;Exportar CSV Anual Completo</button>
-    </div>
+    <div id="dashboard-content"><div class="empty-state" style="padding:60px 0"><div class="icon">📈</div>Pulsa la pestaña para cargar el dashboard.</div></div>
   </section>
+
+  <!-- Template dashboard (oculto, se clona al cargar) -->
+  <template id="dashboard-tpl">
+    <div class="grid-3" style="margin-bottom:16px;">
+      <div class="metric-box"><div class="metric-label">Gasto Anual Total</div><div class="metric-value" id="dash-total">—</div></div>
+      <div class="metric-box"><div class="metric-label">Media Mensual</div><div class="metric-value" id="dash-media">—</div></div>
+      <div class="metric-box">
+        <div class="metric-label">Mes Más Caro</div>
+        <div class="metric-value sm" id="dash-mes-caro">—</div>
+        <div class="metric-value" id="dash-gasto-top" style="font-size:1.8rem;line-height:1;">—</div>
+      </div>
+    </div>
+    <div class="grid-16">
+      <div class="card"><div class="card-label">📊 Gasto por Mes</div><div class="chart-wrap"><canvas id="bar-anual" height="320"></canvas></div></div>
+      <div class="card"><div class="card-label">🍩 Por Categoría (anual)</div><div class="donut-wrap"><canvas id="donut-anual" height="260"></canvas></div><div id="donut-anual-leyenda" style="margin-top:8px;"></div></div>
+    </div>
+    <div class="card"><div class="card-label">🏆 Top 5 Productos Más Gastados</div><div id="top5-list"></div></div>
+    <button class="btn btn-secondary" id="btn-export-anual" style="width:auto">⬇️ &nbsp;Exportar CSV Anual</button>
+  </template>
 
   <!-- ══════════════════════════════════════════
        TAB 3 — BUSCADOR
