@@ -11,27 +11,118 @@
 <body>
 
 <!-- ══ PANTALLA DE LOGIN ══ -->
+<style>
+#login-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: #0a0010;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(180,0,120,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(100,0,200,0.18) 0%, transparent 60%);
+  font-family: 'DM Sans', sans-serif;
+}
+#login-box {
+  width: 380px; max-width: calc(100vw - 32px);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,0,149,0.4);
+  border-radius: 20px; padding: 40px 36px 32px;
+  box-shadow: 0 12px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+  text-align: center;
+}
+#login-box.shake { animation: loginshake .45s ease; }
+@keyframes loginshake {
+  0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)}
+}
+.l-ring {
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 2px solid #ff0095;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 0 24px rgba(255,0,149,0.55);
+  margin: 0 auto 16px;
+}
+.l-title {
+  font-family: 'Bebas Neue', cursive; font-size: 2.5rem; letter-spacing: 5px;
+  background: linear-gradient(90deg,#fff 0%,#ff4dc4 55%,#cc00ff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1; margin: 0 0 6px;
+}
+.l-sub {
+  font-size: 0.67rem; color: rgba(240,230,255,0.25);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 28px;
+}
+.l-group { text-align: left; margin-bottom: 14px; }
+.l-label {
+  display: block; font-size: 0.78rem; font-weight: 500;
+  color: rgba(240,230,255,0.6); margin-bottom: 6px;
+}
+.l-input {
+  width: 100%; background: #1a0030;
+  border: 1px solid rgba(255,0,149,0.4); border-radius: 10px;
+  padding: 11px 14px; color: #fff; font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  box-sizing: border-box;
+}
+.l-input:focus { border-color: #ff0095; box-shadow: 0 0 0 3px rgba(255,0,149,0.15); }
+.l-input::placeholder { color: rgba(255,255,255,0.22); }
+.l-pass-wrap { position: relative; }
+.l-pass-wrap .l-input { padding-right: 46px; }
+.l-eye {
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 44px; background: transparent; border: none;
+  font-size: 1rem; cursor: pointer; opacity: .55;
+  transition: opacity .2s; padding: 0;
+}
+.l-eye:hover { opacity: 1; }
+.l-error {
+  display: none; color: #ff6b6b; font-size: .8rem;
+  background: rgba(255,60,60,0.08); border: 1px solid rgba(255,60,60,0.3);
+  border-radius: 8px; padding: 9px 12px; margin-bottom: 12px;
+  text-align: left;
+}
+.l-btn {
+  width: 100%; margin-top: 6px;
+  background: linear-gradient(135deg, #ff0095, #cc00ff);
+  color: #fff; border: none; border-radius: 10px;
+  padding: 14px 20px; font-family: 'DM Sans', sans-serif;
+  font-weight: 700; font-size: .88rem; letter-spacing: 3px;
+  text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 4px 18px rgba(255,0,149,0.3);
+  transition: all .25s;
+}
+.l-btn:hover {
+  background: linear-gradient(135deg, #ff33aa, #9900ee);
+  box-shadow: 0 6px 28px rgba(200,0,255,0.5);
+  transform: translateY(-2px);
+}
+.l-footer {
+  margin-top: 24px; font-size: .6rem;
+  color: rgba(255,255,255,0.12); letter-spacing: 3px; text-transform: uppercase;
+}
+</style>
+
 <div id="login-screen">
   <div id="login-box">
-    <div class="login-logo-ring">🖋️</div>
-    <h1 class="login-title">INKARIA</h1>
-    <p class="login-sub">Tattoo Inventory · Acceso privado</p>
+    <div class="l-ring">🖋️</div>
+    <h1 class="l-title">INKARIA</h1>
+    <p class="l-sub">Tattoo Inventory · Acceso privado</p>
     <form id="login-form" autocomplete="off">
-      <div class="login-group">
-        <label class="login-label">Usuario</label>
-        <input class="login-input" id="login-user" type="text" placeholder="Usuario..." autocomplete="username" spellcheck="false">
+      <div class="l-group">
+        <label class="l-label">Usuario</label>
+        <input class="l-input" id="login-user" type="text" placeholder="Usuario..." autocomplete="username" spellcheck="false">
       </div>
-      <div class="login-group">
-        <label class="login-label">Contraseña</label>
-        <div class="login-pass-wrap">
-          <input class="login-input" id="login-pass" type="password" placeholder="Contraseña..." autocomplete="current-password">
-          <button type="button" id="login-eye" class="login-eye" tabindex="-1">👁️</button>
+      <div class="l-group">
+        <label class="l-label">Contraseña</label>
+        <div class="l-pass-wrap">
+          <input class="l-input" id="login-pass" type="password" placeholder="Contraseña..." autocomplete="current-password">
+          <button type="button" id="login-eye" class="l-eye" tabindex="-1">👁️</button>
         </div>
       </div>
-      <div id="login-error" class="login-error"></div>
-      <button type="submit" class="btn btn-primary login-btn">Entrar →</button>
+      <div id="login-error" class="l-error"></div>
+      <button type="submit" class="l-btn">Entrar →</button>
     </form>
-    <p class="login-footer">INKARIA · PREMIUM EDITION · <span id="login-year"></span></p>
+    <p class="l-footer">INKARIA · PREMIUM EDITION · <span id="login-year"></span></p>
   </div>
 </div>
 <script>document.getElementById('login-year').textContent = new Date().getFullYear();</script>

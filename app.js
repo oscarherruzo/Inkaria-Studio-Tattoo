@@ -668,7 +668,6 @@ function initLogin() {
       err.style.display = 'block';
       document.getElementById('login-pass').value = '';
       document.getElementById('login-pass').focus();
-      // Shake
       document.getElementById('login-box').classList.add('shake');
       setTimeout(() => document.getElementById('login-box').classList.remove('shake'), 500);
     }
