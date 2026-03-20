@@ -7,290 +7,180 @@
 <link rel="stylesheet" href="styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 <script src="app.js" defer></script>
+<style>
+/* ── LOGIN ── */
+#login-screen {
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  background:#0a0010;
+  background-image:radial-gradient(ellipse 80% 50% at 20% -10%,rgba(180,0,120,0.22) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 110%,rgba(100,0,200,0.18) 0%,transparent 60%);
+  font-family:'DM Sans',sans-serif;
+}
+#login-box{width:380px;max-width:calc(100vw - 32px);background:rgba(255,255,255,0.03);border:1px solid rgba(255,0,149,0.4);border-radius:20px;padding:40px 36px 32px;box-shadow:0 12px 60px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.05);text-align:center;}
+#login-box.shake{animation:loginshake .45s ease;}
+@keyframes loginshake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.l-ring{width:56px;height:56px;border-radius:50%;border:2px solid #ff0095;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 0 24px rgba(255,0,149,0.55);margin:0 auto 16px;}
+.l-title{font-family:'Bebas Neue',cursive;font-size:2.5rem;letter-spacing:5px;background:linear-gradient(90deg,#fff 0%,#ff4dc4 55%,#cc00ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin:0 0 6px;}
+.l-sub{font-size:0.67rem;color:rgba(240,230,255,0.25);letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;}
+.l-group{text-align:left;margin-bottom:14px;}
+.l-label{display:block;font-size:0.78rem;font-weight:500;color:rgba(240,230,255,0.6);margin-bottom:6px;}
+.l-input{width:100%;background:#1a0030;border:1px solid rgba(255,0,149,0.4);border-radius:10px;padding:11px 14px;color:#fff;font-size:0.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;box-sizing:border-box;}
+.l-input:focus{border-color:#ff0095;box-shadow:0 0 0 3px rgba(255,0,149,0.15);}
+.l-input::placeholder{color:rgba(255,255,255,0.22);}
+.l-pass-wrap{position:relative;}
+.l-pass-wrap .l-input{padding-right:46px;}
+.l-eye{position:absolute;right:0;top:0;bottom:0;width:44px;background:transparent;border:none;font-size:1rem;cursor:pointer;opacity:.55;transition:opacity .2s;padding:0;}
+.l-eye:hover{opacity:1;}
+.l-error{display:none;color:#ff6b6b;font-size:.8rem;background:rgba(255,60,60,0.08);border:1px solid rgba(255,60,60,0.3);border-radius:8px;padding:9px 12px;margin-bottom:12px;text-align:left;}
+.l-btn{width:100%;margin-top:6px;background:linear-gradient(135deg,#ff0095,#cc00ff);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 18px rgba(255,0,149,0.3);transition:all .25s;}
+.l-btn:hover{background:linear-gradient(135deg,#ff33aa,#9900ee);box-shadow:0 6px 28px rgba(200,0,255,0.5);transform:translateY(-2px);}
+.l-footer{margin-top:24px;font-size:.6rem;color:rgba(255,255,255,0.12);letter-spacing:3px;text-transform:uppercase;}
+
+/* ── HEADER GASTO ── */
+.header-gasto-wrap{margin-left:12px;background:rgba(255,0,149,0.1);border:1px solid rgba(255,0,149,0.3);border-radius:8px;padding:5px 12px;text-align:center;}
+.header-gasto-label{font-size:.6rem;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;display:block;}
+.header-gasto-val{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#ff4dc4;letter-spacing:1px;}
+
+/* ── NOTAS ── */
+.nota-item{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.nota-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.nota-tipo{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--pink2);}
+.nota-fecha{font-size:.68rem;color:var(--muted2);margin-left:auto;}
+.nota-texto{font-size:.85rem;color:rgba(240,230,255,0.8);line-height:1.5;}
+.nota-tipo-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;}
+
+/* ── CALCULADORA ── */
+.calc-precio-wrap{text-align:center;padding:20px 0 12px;border-bottom:1px solid rgba(255,0,149,0.2);margin-bottom:12px;}
+.calc-rango{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:2px;color:#fff;line-height:1;}
+.calc-label{font-size:.65rem;color:var(--muted2);letter-spacing:3px;text-transform:uppercase;margin-top:4px;}
+.calc-desglose{font-size:.82rem;}
+.calc-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);color:rgba(240,230,255,0.6);}
+.calc-row:last-child{border-bottom:none;}
+
+/* ── MODAL EDITAR ── */
+.modal-subtitle{font-size:.75rem;color:var(--muted);margin-bottom:16px;font-style:italic;}
+</style>
 </head>
 <body>
 
-<!-- ══ PANTALLA DE LOGIN ══ -->
-<style>
-#login-screen {
-  position: fixed; inset: 0; z-index: 9999;
-  display: flex; align-items: center; justify-content: center;
-  background: #0a0010;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(180,0,120,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 110%, rgba(100,0,200,0.18) 0%, transparent 60%);
-  font-family: 'DM Sans', sans-serif;
-}
-#login-box {
-  width: 380px; max-width: calc(100vw - 32px);
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,0,149,0.4);
-  border-radius: 20px; padding: 40px 36px 32px;
-  box-shadow: 0 12px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
-  text-align: center;
-}
-#login-box.shake { animation: loginshake .45s ease; }
-@keyframes loginshake {
-  0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-8px)} 40%,80%{transform:translateX(8px)}
-}
-.l-ring {
-  width: 56px; height: 56px; border-radius: 50%;
-  border: 2px solid #ff0095;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
-  box-shadow: 0 0 24px rgba(255,0,149,0.55);
-  margin: 0 auto 16px;
-}
-.l-title {
-  font-family: 'Bebas Neue', cursive; font-size: 2.5rem; letter-spacing: 5px;
-  background: linear-gradient(90deg,#fff 0%,#ff4dc4 55%,#cc00ff 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; line-height: 1; margin: 0 0 6px;
-}
-.l-sub {
-  font-size: 0.67rem; color: rgba(240,230,255,0.25);
-  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 28px;
-}
-.l-group { text-align: left; margin-bottom: 14px; }
-.l-label {
-  display: block; font-size: 0.78rem; font-weight: 500;
-  color: rgba(240,230,255,0.6); margin-bottom: 6px;
-}
-.l-input {
-  width: 100%; background: #1a0030;
-  border: 1px solid rgba(255,0,149,0.4); border-radius: 10px;
-  padding: 11px 14px; color: #fff; font-size: 0.9rem;
-  font-family: 'DM Sans', sans-serif;
-  outline: none; transition: border-color .2s, box-shadow .2s;
-  box-sizing: border-box;
-}
-.l-input:focus { border-color: #ff0095; box-shadow: 0 0 0 3px rgba(255,0,149,0.15); }
-.l-input::placeholder { color: rgba(255,255,255,0.22); }
-.l-pass-wrap { position: relative; }
-.l-pass-wrap .l-input { padding-right: 46px; }
-.l-eye {
-  position: absolute; right: 0; top: 0; bottom: 0;
-  width: 44px; background: transparent; border: none;
-  font-size: 1rem; cursor: pointer; opacity: .55;
-  transition: opacity .2s; padding: 0;
-}
-.l-eye:hover { opacity: 1; }
-.l-error {
-  display: none; color: #ff6b6b; font-size: .8rem;
-  background: rgba(255,60,60,0.08); border: 1px solid rgba(255,60,60,0.3);
-  border-radius: 8px; padding: 9px 12px; margin-bottom: 12px;
-  text-align: left;
-}
-.l-btn {
-  width: 100%; margin-top: 6px;
-  background: linear-gradient(135deg, #ff0095, #cc00ff);
-  color: #fff; border: none; border-radius: 10px;
-  padding: 14px 20px; font-family: 'DM Sans', sans-serif;
-  font-weight: 700; font-size: .88rem; letter-spacing: 3px;
-  text-transform: uppercase; cursor: pointer;
-  box-shadow: 0 4px 18px rgba(255,0,149,0.3);
-  transition: all .25s;
-}
-.l-btn:hover {
-  background: linear-gradient(135deg, #ff33aa, #9900ee);
-  box-shadow: 0 6px 28px rgba(200,0,255,0.5);
-  transform: translateY(-2px);
-}
-.l-footer {
-  margin-top: 24px; font-size: .6rem;
-  color: rgba(255,255,255,0.12); letter-spacing: 3px; text-transform: uppercase;
-}
-</style>
-
+<!-- ══ LOGIN ══ -->
 <div id="login-screen">
   <div id="login-box">
     <div class="l-ring">🖋️</div>
     <h1 class="l-title">INKARIA</h1>
     <p class="l-sub">Tattoo Inventory · Acceso privado</p>
     <form id="login-form" autocomplete="off">
-      <div class="l-group">
-        <label class="l-label">Usuario</label>
-        <input class="l-input" id="login-user" type="text" placeholder="Usuario..." autocomplete="username" spellcheck="false">
-      </div>
-      <div class="l-group">
-        <label class="l-label">Contraseña</label>
-        <div class="l-pass-wrap">
-          <input class="l-input" id="login-pass" type="password" placeholder="Contraseña..." autocomplete="current-password">
-          <button type="button" id="login-eye" class="l-eye" tabindex="-1">👁️</button>
-        </div>
-      </div>
+      <div class="l-group"><label class="l-label">Usuario</label><input class="l-input" id="login-user" type="text" placeholder="Usuario..." autocomplete="username" spellcheck="false"></div>
+      <div class="l-group"><label class="l-label">Contraseña</label><div class="l-pass-wrap"><input class="l-input" id="login-pass" type="password" placeholder="Contraseña..." autocomplete="current-password"><button type="button" id="login-eye" class="l-eye" tabindex="-1">👁️</button></div></div>
       <div id="login-error" class="l-error"></div>
       <button type="submit" class="l-btn">Entrar →</button>
     </form>
     <p class="l-footer">INKARIA · PREMIUM EDITION · <span id="login-year"></span></p>
   </div>
 </div>
-<script>document.getElementById('login-year').textContent = new Date().getFullYear();</script>
+<script>document.getElementById('login-year').textContent=new Date().getFullYear();</script>
 
 <!-- ══ APP ══ -->
 <div id="app-wrapper" style="display:none">
 <div class="app-wrapper">
 
-  <!-- ── HEADER ── -->
+  <!-- HEADER -->
   <header class="inkaria-header">
     <div class="logo-ring">🖋️</div>
     <div>
       <p class="header-title">INKARIA</p>
       <p class="header-sub">Tattoo Inventory · Premium Edition</p>
     </div>
-    <button id="btn-logout" class="btn btn-secondary" style="margin-left:auto;letter-spacing:1px;font-size:.72rem;padding:7px 14px;">
-      🔒 Cerrar sesión
-    </button>
-    <a href="https://docs.google.com/spreadsheets/d/1PNy8N4irs990cfBM2pEDrlWjusPNfES-eDdFlAMEz0s" target="_blank" class="btn btn-secondary" style="letter-spacing:1px;font-size:.72rem;padding:7px 14px;">
-      🗄️ Google Sheets
-    </a>
+    <div class="header-gasto-wrap">
+      <span class="header-gasto-label">Este mes</span>
+      <span class="header-gasto-val" id="header-gasto">— €</span>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="https://docs.google.com/spreadsheets/d/1PNy8N4irs990cfBM2pEDrlWjusPNfES-eDdFlAMEz0s" target="_blank" class="btn btn-secondary" style="letter-spacing:1px;font-size:.72rem;padding:7px 14px;">🗄️ Sheets</a>
+      <button id="btn-logout" class="btn btn-secondary" style="letter-spacing:1px;font-size:.72rem;padding:7px 14px;">🔒 Salir</button>
+    </div>
   </header>
 
-  <!-- ── TABS ── -->
+  <!-- TABS -->
   <nav class="tabs-bar">
     <button class="tab-btn active" data-tab="tab-registro">📝 Registro</button>
-    <button class="tab-btn"        data-tab="tab-dashboard">📈 Dashboard Anual</button>
-    <button class="tab-btn"        data-tab="tab-buscador">🔍 Buscador</button>
-    <button class="tab-btn"        data-tab="tab-proveedores">🏪 Proveedores</button>
-    <button class="tab-btn"        data-tab="tab-catalogo">⚙️ Catálogo</button>
+    <button class="tab-btn" data-tab="tab-dashboard">📈 Dashboard</button>
+    <button class="tab-btn" data-tab="tab-buscador">🔍 Buscador</button>
+    <button class="tab-btn" data-tab="tab-proveedores">🏪 Proveedores</button>
+    <button class="tab-btn" data-tab="tab-catalogo">⚙️ Catálogo</button>
+    <button class="tab-btn" data-tab="tab-notas">📋 Notas</button>
+    <button class="tab-btn" data-tab="tab-calculadora">🧮 Calculadora</button>
   </nav>
 
-  <!-- ══════════════════════════════════════════
-       TAB 1 — REGISTRO
-  ══════════════════════════════════════════ -->
+  <!-- ══ TAB 1 — REGISTRO ══ -->
   <section id="tab-registro" class="tab-panel active">
     <div class="grid-2">
-
-      <!-- Columna izquierda -->
       <div>
-        <!-- Formulario nuevo registro -->
         <div class="card">
           <div class="card-label">📝 New Entry</div>
           <div id="form-msg"></div>
           <form id="registro-form">
-            <div class="form-group">
-              <label class="form-label">Categoría</label>
-              <select class="form-select" id="form-cat"></select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Producto</label>
-              <select class="form-select" id="form-prod"></select>
-            </div>
+            <div class="form-group"><label class="form-label">Categoría</label><select class="form-select" id="form-cat"></select></div>
+            <div class="form-group"><label class="form-label">Producto</label><select class="form-select" id="form-prod"></select></div>
             <div class="form-group">
               <label class="form-label">Proveedor</label>
               <select class="form-select" id="form-prov"></select>
-              <div id="prov-nuevo-wrap" style="margin-top:8px;">
-                <input class="form-input" id="form-prov-nuevo" placeholder="Escribe el nombre del proveedor...">
-              </div>
+              <div id="prov-nuevo-wrap" style="margin-top:8px;"><input class="form-input" id="form-prov-nuevo" placeholder="Escribe el nombre del proveedor..."></div>
             </div>
             <div class="grid-inputs">
-              <div class="form-group">
-                <label class="form-label">Cantidad</label>
-                <input class="form-input" type="number" id="form-cant" min="1" value="1">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Precio Total (€)</label>
-                <input class="form-input" type="number" id="form-precio" min="0" step="0.5" value="0">
-              </div>
+              <div class="form-group"><label class="form-label">Cantidad</label><input class="form-input" type="number" id="form-cant" min="1" value="1"></div>
+              <div class="form-group"><label class="form-label">Precio Total (€)</label><input class="form-input" type="number" id="form-precio" min="0" step="0.5" value="0"></div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Notas</label>
-              <textarea class="form-textarea" id="form-notas" placeholder="Detalles del pedido, lote, etc..."></textarea>
-            </div>
+            <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="form-notas" placeholder="Detalles del pedido, lote, etc..."></textarea></div>
             <button type="submit" class="btn btn-primary">✓ &nbsp;Confirmar Registro</button>
           </form>
         </div>
 
-        <!-- Historial -->
         <div class="card">
           <div class="card-label">🗂 Últimos Registros</div>
-          <div class="form-group">
-            <label class="form-label">Ver mes</label>
-            <select class="form-select" id="mes-select"></select>
-          </div>
+          <div class="form-group"><label class="form-label">Ver mes</label><select class="form-select" id="mes-select"></select></div>
           <table class="hist-table">
-            <thead>
-              <tr>
-                <th>Fecha</th><th>Categoría</th><th>Producto</th>
-                <th class="right">Total</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Fecha</th><th>Categoría</th><th>Producto</th><th class="right">Total</th><th class="right">Acciones</th></tr></thead>
             <tbody id="historial-tbody"></tbody>
           </table>
           <br>
-          <button class="btn btn-secondary" id="btn-export-mes" style="width:auto">⬇️ &nbsp;Exportar CSV del mes</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-secondary" id="btn-export-mes" style="width:auto">⬇️ Exportar CSV</button>
+            <button class="btn btn-danger" id="btn-clear-mes" style="width:auto;padding:8px 14px;font-size:.75rem;">🗑️ Limpiar mes</button>
+          </div>
         </div>
       </div>
 
-      <!-- Columna derecha — Analytics -->
       <div>
         <div class="card">
           <div class="card-label" id="analytics-mes">📊 Analytics</div>
           <div class="grid-2b">
-            <div class="metric-box">
-              <div class="metric-label">Gasto Total</div>
-              <div class="metric-value" id="metric-total">0,00 €</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Ticket Medio</div>
-              <div class="metric-value" id="metric-ticket">0,00 €</div>
-            </div>
+            <div class="metric-box"><div class="metric-label">Gasto Total</div><div class="metric-value" id="metric-total">0,00 €</div></div>
+            <div class="metric-box"><div class="metric-label">Ticket Medio</div><div class="metric-value" id="metric-ticket">0,00 €</div></div>
           </div>
+          <div id="presupuesto-wrap"></div>
           <hr>
-          <div class="donut-wrap" style="margin:12px 0 8px;">
-            <canvas id="donut-mes" height="260"></canvas>
-          </div>
+          <div class="donut-wrap" style="margin:12px 0 8px;"><canvas id="donut-mes" height="260"></canvas></div>
           <div id="donut-mes-leyenda" style="margin-top:8px;"></div>
         </div>
         <div id="alertas-wrap"></div>
       </div>
-
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       TAB 2 — DASHBOARD ANUAL
-  ══════════════════════════════════════════ -->
+  <!-- ══ TAB 2 — DASHBOARD ══ -->
   <section id="tab-dashboard" class="tab-panel">
-    <div id="dashboard-content"><div class="empty-state" style="padding:60px 0"><div class="icon">📈</div>Pulsa la pestaña para cargar el dashboard.</div></div>
+    <div id="dashboard-content"><div class="empty-state" style="padding:60px 0"><div class="icon">📈</div>Pulsa la pestaña para cargar.</div></div>
   </section>
 
-  <!-- Template dashboard (oculto, se clona al cargar) -->
-  <template id="dashboard-tpl">
-    <div class="grid-3" style="margin-bottom:16px;">
-      <div class="metric-box"><div class="metric-label">Gasto Anual Total</div><div class="metric-value" id="dash-total">—</div></div>
-      <div class="metric-box"><div class="metric-label">Media Mensual</div><div class="metric-value" id="dash-media">—</div></div>
-      <div class="metric-box">
-        <div class="metric-label">Mes Más Caro</div>
-        <div class="metric-value sm" id="dash-mes-caro">—</div>
-        <div class="metric-value" id="dash-gasto-top" style="font-size:1.8rem;line-height:1;">—</div>
-      </div>
-    </div>
-    <div class="grid-16">
-      <div class="card"><div class="card-label">📊 Gasto por Mes</div><div class="chart-wrap"><canvas id="bar-anual" height="320"></canvas></div></div>
-      <div class="card"><div class="card-label">🍩 Por Categoría (anual)</div><div class="donut-wrap"><canvas id="donut-anual" height="260"></canvas></div><div id="donut-anual-leyenda" style="margin-top:8px;"></div></div>
-    </div>
-    <div class="card"><div class="card-label">🏆 Top 5 Productos Más Gastados</div><div id="top5-list"></div></div>
-    <button class="btn btn-secondary" id="btn-export-anual" style="width:auto">⬇️ &nbsp;Exportar CSV Anual</button>
-  </template>
-
-  <!-- ══════════════════════════════════════════
-       TAB 3 — BUSCADOR
-  ══════════════════════════════════════════ -->
+  <!-- ══ TAB 3 — BUSCADOR ══ -->
   <section id="tab-buscador" class="tab-panel">
     <div class="card">
       <div class="card-label">🔍 Buscar Registros</div>
       <form id="busq-form" onsubmit="return false;">
         <div class="search-bar">
-          <div class="form-group" style="margin:0">
-            <input class="form-input" id="busq-q" placeholder="Producto o proveedor...">
-          </div>
-          <div class="form-group" style="margin:0">
-            <select class="form-select" id="busq-cat"></select>
-          </div>
-          <div class="form-group" style="margin:0">
-            <select class="form-select" id="busq-mes"></select>
-          </div>
+          <div class="form-group" style="margin:0"><input class="form-input" id="busq-q" placeholder="Producto o proveedor..."></div>
+          <div class="form-group" style="margin:0"><select class="form-select" id="busq-cat"></select></div>
+          <div class="form-group" style="margin:0"><select class="form-select" id="busq-mes"></select></div>
         </div>
       </form>
     </div>
@@ -300,77 +190,43 @@
     </div>
     <div id="busq-results"></div>
     <br>
-    <button class="btn btn-secondary" id="btn-export-busq" style="width:auto">⬇️ &nbsp;Exportar resultados</button>
+    <button class="btn btn-secondary" id="btn-export-busq" style="width:auto">⬇️ Exportar resultados</button>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       TAB 4 — PROVEEDORES
-  ══════════════════════════════════════════ -->
+  <!-- ══ TAB 4 — PROVEEDORES ══ -->
   <section id="tab-proveedores" class="tab-panel">
     <div class="grid-11">
-      <!-- Formulario -->
       <div class="card">
         <div class="card-label">➕ Añadir Proveedor</div>
         <div id="prov-msg"></div>
         <form id="prov-form">
-          <div class="form-group">
-            <label class="form-label">Nombre *</label>
-            <input class="form-input" id="prov-nombre" placeholder="Ej: Kwadron, Eternal Ink...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Categoría principal</label>
-            <select class="form-select" id="prov-cat"></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Web / Email</label>
-            <input class="form-input" id="prov-web" placeholder="https://... o email@...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Teléfono</label>
-            <input class="form-input" id="prov-tel" placeholder="+34 ...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Notas</label>
-            <textarea class="form-textarea" id="prov-notas" placeholder="Condiciones, descuentos habituales..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-check">
-              <input type="checkbox" id="prov-fav">
-              <span>⭐ Proveedor favorito</span>
-            </label>
-          </div>
+          <div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" id="prov-nombre" placeholder="Ej: Kwadron, Eternal Ink..."></div>
+          <div class="form-group"><label class="form-label">Categoría principal</label><select class="form-select" id="prov-cat"></select></div>
+          <div class="form-group"><label class="form-label">Web / Email</label><input class="form-input" id="prov-web" placeholder="https://... o email@..."></div>
+          <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="prov-tel" placeholder="+34 ..."></div>
+          <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="prov-notas" placeholder="Condiciones, descuentos..."></textarea></div>
+          <div class="form-group"><label class="form-check"><input type="checkbox" id="prov-fav"><span>⭐ Proveedor favorito</span></label></div>
           <button type="submit" class="btn btn-primary">Guardar Proveedor</button>
         </form>
       </div>
-      <!-- Lista -->
       <div class="card">
         <div class="card-label">🏪 Mis Proveedores</div>
-        <div class="form-group">
-          <input class="form-input" id="prov-busq" placeholder="Buscar por nombre o categoría...">
-        </div>
+        <div class="form-group"><input class="form-input" id="prov-busq" placeholder="Buscar..."></div>
         <div id="prov-list"></div>
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════════
-       TAB 5 — CATÁLOGO
-  ══════════════════════════════════════════ -->
+  <!-- ══ TAB 5 — CATÁLOGO ══ -->
   <section id="tab-catalogo" class="tab-panel">
-    <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px;">
-      Añade tus propias categorías y productos. Se guardan localmente y aparecen en el formulario de Registro.
-    </p>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px;">Añade o elimina categorías y productos. Los cambios se guardan en Google Sheets.</p>
     <div class="grid-11">
-      <!-- Formularios -->
       <div>
         <div class="card">
           <div class="card-label">📁 Nueva Categoría</div>
           <div id="cat-msg"></div>
           <form id="cat-nueva-form">
-            <div class="form-group">
-              <label class="form-label">Nombre</label>
-              <input class="form-input" id="cat-nueva-input" placeholder="Ej: Máquinas Vintage, Pigmentos PMU...">
-            </div>
+            <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="cat-nueva-input" placeholder="Ej: Máquinas Vintage..."></div>
             <button type="submit" class="btn btn-primary">Añadir Categoría</button>
           </form>
         </div>
@@ -378,35 +234,134 @@
           <div class="card-label">🏷️ Nuevo Producto</div>
           <div id="prod-msg"></div>
           <form id="prod-nuevo-form">
-            <div class="form-group">
-              <label class="form-label">Categoría destino</label>
-              <select class="form-select" id="prod-cat-dest"></select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Nombre del producto</label>
-              <input class="form-input" id="prod-nuevo-input" placeholder="Ej: Cartucho 27M1, Grip Pro...">
-            </div>
+            <div class="form-group"><label class="form-label">Categoría destino</label><select class="form-select" id="prod-cat-dest"></select></div>
+            <div class="form-group"><label class="form-label">Nombre del producto</label><input class="form-input" id="prod-nuevo-input" placeholder="Ej: Cartucho 27M1..."></div>
             <button type="submit" class="btn btn-primary">Añadir Producto</button>
           </form>
         </div>
       </div>
-      <!-- Lista catálogo -->
       <div class="card">
         <div class="card-label">📋 Catálogo Completo</div>
-        <div class="form-group">
-          <input class="form-input" id="cat-filtro" placeholder="Filtrar categorías o productos...">
-        </div>
+        <div class="form-group"><input class="form-input" id="cat-filtro" placeholder="Filtrar..."></div>
         <div id="catalogo-list"></div>
       </div>
     </div>
   </section>
 
-  <!-- ── FOOTER ── -->
-  <footer class="footer">INKARIA TATTOO INVENTORY · PREMIUM EDITION · <span id="year"></span></footer>
+  <!-- ══ TAB 6 — NOTAS ══ -->
+  <section id="tab-notas" class="tab-panel">
+    <div class="grid-11">
+      <div class="card">
+        <div class="card-label">📝 Nueva Nota</div>
+        <form id="nota-form">
+          <div class="form-group"><label class="form-label">Nota / tarea</label><textarea class="form-textarea" id="nota-texto" placeholder="Ej: Pedir agujas RL antes del viernes..." style="min-height:100px;"></textarea></div>
+          <div class="nota-tipo-row">
+            <div class="form-group" style="margin:0"><label class="form-label">Tipo</label>
+              <select class="form-select" id="nota-tipo">
+                <option value="nota">📝 Nota</option>
+                <option value="compra">🛒 Lista de compra</option>
+                <option value="urgente">🔴 Urgente</option>
+                <option value="idea">💡 Idea</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:auto;padding:10px 20px;align-self:flex-end;">Guardar</button>
+          </div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-label">📋 Mis Notas</div>
+        <div id="notas-list"></div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ══ TAB 7 — CALCULADORA ══ -->
+  <section id="tab-calculadora" class="tab-panel">
+    <div class="grid-11">
+      <div class="card">
+        <div class="card-label">🧮 Calculadora de Precio</div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:16px;">Estima el precio de un tatuaje según tamaño, estilo y zona.</p>
+        <form id="calc-form">
+          <div class="form-group"><label class="form-label">Tamaño</label>
+            <select class="form-select" id="calc-tamano">
+              <option value="minimo">Mínimo (sello, 2-3cm)</option>
+              <option value="pequeno">Pequeño (palma)</option>
+              <option value="medio" selected>Medio (antebrazo)</option>
+              <option value="grande">Grande (media manga)</option>
+              <option value="maxi">Muy grande (espalda entera)</option>
+              <option value="manga">Manga completa</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Estilo</label>
+            <select class="form-select" id="calc-estilo">
+              <option value="linework">Linework</option>
+              <option value="blackwork" selected>Blackwork</option>
+              <option value="geometrico">Geométrico</option>
+              <option value="fineline">Fine line</option>
+              <option value="acuarela">Acuarela</option>
+              <option value="neotradicional">Neotradicional</option>
+              <option value="realismo">Realismo</option>
+              <option value="portrait">Portrait / Retrato</option>
+              <option value="japonés">Japonés</option>
+              <option value="tradicional">Tradicional</option>
+              <option value="chicano">Chicano</option>
+              <option value="puntillismo">Puntillismo</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Zona del cuerpo</label>
+            <select class="form-select" id="calc-zona">
+              <option value="brazo" selected>Brazo / antebrazo</option>
+              <option value="pierna">Pierna / muslo</option>
+              <option value="espalda">Espalda</option>
+              <option value="costilla">Costilla / lateral</option>
+              <option value="cuello">Cuello</option>
+              <option value="mano">Mano / dedos</option>
+              <option value="pie">Pie</option>
+              <option value="cara">Cara / cabeza</option>
+              <option value="normal">Otro</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Número de sesiones</label>
+            <input class="form-input" type="number" id="calc-sesiones" min="1" max="20" value="1">
+          </div>
+          <div class="form-group"><label class="form-check">
+            <input type="checkbox" id="calc-extra">
+            <span>🎨 Incluye color / detalles extra (+15%)</span>
+          </label></div>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-label">💰 Estimación de Precio</div>
+        <div id="calc-resultado"><div class="empty-state"><div class="icon">🧮</div>Configura los parámetros para ver el precio.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">INKARIA TATTOO INVENTORY · PREMIUM EDITION · <span id="year"></span></footer>
 </div>
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
-</div><!-- /app-wrapper inner -->
-</div><!-- /app-wrapper outer -->
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+</div>
+
+<!-- ══ MODAL EDITAR REGISTRO ══ -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-title">✏️ Editar Registro</div>
+    <p class="modal-subtitle" id="edit-prod-txt"></p>
+    <form id="edit-form">
+      <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="edit-fecha" type="text" placeholder="dd/mm/yyyy"></div>
+      <div class="form-group"><label class="form-label">Proveedor</label><input class="form-input" id="edit-prov"></div>
+      <div class="grid-inputs">
+        <div class="form-group"><label class="form-label">Cantidad</label><input class="form-input" type="number" id="edit-cant" min="1"></div>
+        <div class="form-group"><label class="form-label">Precio (€)</label><input class="form-input" type="number" id="edit-precio" min="0" step="0.5"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Notas</label><textarea class="form-textarea" id="edit-notas"></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="modal-edit-close">Cancelar</button>
+        <button type="submit" class="btn btn-primary">💾 Guardar cambios</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
