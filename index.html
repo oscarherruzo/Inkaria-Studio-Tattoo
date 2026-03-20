@@ -9,6 +9,35 @@
 <script src="app.js" defer></script>
 </head>
 <body>
+
+<!-- ══ PANTALLA DE LOGIN ══ -->
+<div id="login-screen">
+  <div id="login-box">
+    <div class="login-logo-ring">🖋️</div>
+    <h1 class="login-title">INKARIA</h1>
+    <p class="login-sub">Tattoo Inventory · Acceso privado</p>
+    <form id="login-form" autocomplete="off">
+      <div class="login-group">
+        <label class="login-label">Usuario</label>
+        <input class="login-input" id="login-user" type="text" placeholder="Usuario..." autocomplete="username" spellcheck="false">
+      </div>
+      <div class="login-group">
+        <label class="login-label">Contraseña</label>
+        <div class="login-pass-wrap">
+          <input class="login-input" id="login-pass" type="password" placeholder="Contraseña..." autocomplete="current-password">
+          <button type="button" id="login-eye" class="login-eye" tabindex="-1">👁️</button>
+        </div>
+      </div>
+      <div id="login-error" class="login-error"></div>
+      <button type="submit" class="btn btn-primary login-btn">Entrar →</button>
+    </form>
+    <p class="login-footer">INKARIA · PREMIUM EDITION · <span id="login-year"></span></p>
+  </div>
+</div>
+<script>document.getElementById('login-year').textContent = new Date().getFullYear();</script>
+
+<!-- ══ APP ══ -->
+<div id="app-wrapper" style="display:none">
 <div class="app-wrapper">
 
   <!-- ── HEADER ── -->
@@ -18,6 +47,9 @@
       <p class="header-title">INKARIA</p>
       <p class="header-sub">Tattoo Inventory · Premium Edition</p>
     </div>
+    <button id="btn-logout" class="btn btn-secondary" style="margin-left:auto;letter-spacing:1px;font-size:.72rem;padding:7px 14px;">
+      🔒 Cerrar sesión
+    </button>
   </header>
 
   <!-- ── TABS ── -->
@@ -300,5 +332,7 @@
 
 </div>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</div><!-- /app-wrapper inner -->
+</div><!-- /app-wrapper outer -->
 </body>
 </html>

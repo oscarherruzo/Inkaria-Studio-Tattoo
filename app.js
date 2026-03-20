@@ -634,13 +634,72 @@ function renderCatalogo() {
 }
 
 /* ══════════════════════════════════════════════════════════
-   INIT
+   LOGIN
 ══════════════════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+const AUTH = {
+  // Credenciales — ofuscadas en base64 para no quedar en texto plano visible
+  _u: atob('SW5rYXJpYQ=='),           // Inkaria
+  _p: atob('SW5rYXJpYVRhdHRvbzIwMjZNYXJpYQ=='), // InkariaTattoo2026Maria
+  SESSION_KEY: 'ink_auth',
+  isLogged:  () => sessionStorage.getItem('ink_auth') === '1',
+  login:     () => sessionStorage.setItem('ink_auth', '1'),
+  logout:    () => { sessionStorage.removeItem('ink_auth'); location.reload(); },
+  check:     (u, p) => u === AUTH._u && p === AUTH._p,
+};
+
+function initLogin() {
+  if (AUTH.isLogged()) {
+    showApp();
+    return;
+  }
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app-wrapper').style.display  = 'none';
+
+  document.getElementById('login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const u = document.getElementById('login-user').value.trim();
+    const p = document.getElementById('login-pass').value;
+    if (AUTH.check(u, p)) {
+      AUTH.login();
+      showApp();
+    } else {
+      const err = document.getElementById('login-error');
+      err.textContent = 'Usuario o contraseña incorrectos.';
+      err.style.display = 'block';
+      document.getElementById('login-pass').value = '';
+      document.getElementById('login-pass').focus();
+      // Shake
+      document.getElementById('login-box').classList.add('shake');
+      setTimeout(() => document.getElementById('login-box').classList.remove('shake'), 500);
+    }
+  });
+
+  // Toggle password visibility
+  document.getElementById('login-eye').addEventListener('click', function() {
+    const inp = document.getElementById('login-pass');
+    const showing = inp.type === 'text';
+    inp.type = showing ? 'password' : 'text';
+    this.textContent = showing ? '👁️' : '🙈';
+  });
+}
+
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-wrapper').style.display  = 'block';
   initRegistroForm();
   renderHistorial();
   renderAnalytics();
   initBuscador();
   initProveedores();
   initCatalogo();
-});
+
+  // Botón cerrar sesión
+  document.getElementById('btn-logout').addEventListener('click', () => {
+    if (confirm('¿Cerrar sesión?')) AUTH.logout();
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', initLogin);
