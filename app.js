@@ -435,7 +435,7 @@ async function renderDashboard(){
         <div class="metric-box"><div class="metric-label">Mes Más Caro</div><div class="metric-value sm" id="dash-mes-caro"></div><div class="metric-value" id="dash-gasto-top" style="font-size:1.8rem;line-height:1;"></div></div>
       </div>
       <div class="grid-16">
-        <div class="card"><div class="card-label">📊 Gasto por Mes</div><div class="chart-wrap" style="position:relative;height:260px;"><canvas id="bar-anual"></canvas></div></div>
+        <div class="card"><div class="card-label">📊 Gasto por Mes</div><div style="position:relative;height:220px;width:100%;"><canvas id="bar-anual"></canvas></div></div>
         <div class="card"><div class="card-label">🍩 Por Categoría</div><div class="donut-wrap"><canvas id="donut-anual" height="260"></canvas></div><div id="donut-anual-leyenda" style="margin-top:8px;"></div></div>
       </div>
       <div class="card"><div class="card-label">🏆 Top 5 Productos</div><div id="top5-list"></div></div>
@@ -676,85 +676,85 @@ function calcularPrecio(){
   const sesiones = parseInt(document.getElementById('calc-sesiones')?.value)||1;
   const extra    = document.getElementById('calc-extra')?.checked||false;
 
-  // ── Tarifas base mercado andaluz / sur de España ──────────
-  // Tarifa hora media estudio Andalucía: 60–80 €/h
-  // Mínimos y tiempos estimados reales por tamaño
+  // ── Tarifas base — tatuadora junior (6 meses experiencia, Andalucía) ──
+  // Tarifa hora mercado andaluz junior: 40–55 €/h (vs 60–80 €/h senior)
+  // Precios antes de margen de beneficio
   const BASE = {
-    minimo:  40,   // mínimo de estudio (~30 min, sello/inicial)
-    pequeno: 80,   // pequeño (~1h, palma de mano)
-    medio:   160,  // medio (~2-3h, antebrazo/costado pequeño)
-    grande:  320,  // grande (~4-6h, media manga / espalda media)
-    maxi:    600,  // muy grande (~8-10h, espalda entera)
-    manga:   1100, // manga completa (varias sesiones, precio total)
+    minimo:  30,   // mínimo estudio (~30 min)
+    pequeno: 55,   // pequeño (~1h)
+    medio:   110,  // medio (~2–2.5h)
+    grande:  240,  // grande (~4–5h)
+    maxi:    450,  // muy grande (~8h)
+    manga:   850,  // manga completa (varias sesiones)
   };
 
-  // ── Multiplicadores por estilo ────────────────────────────
-  // Fine line y realismo son más lentos = más caro en Andalucía
   const ESTILO = {
     linework:       1.0,
     blackwork:      1.0,
     geometrico:     1.05,
-    fineline:       1.25,  // muy de moda, lento, caro
-    acuarela:       1.2,
+    fineline:       1.2,
+    acuarela:       1.15,
     neotradicional: 1.1,
-    realismo:       1.45,  // el más caro por dificultad
-    portrait:       1.5,
-    japonés:        1.3,   // mucho relleno, sesiones largas
-    tradicional:    0.95,  // rápido de ejecutar
-    chicano:        1.15,
-    puntillismo:    1.35,  // muy lento
+    realismo:       1.35,
+    portrait:       1.4,
+    japonés:        1.2,
+    tradicional:    0.95,
+    chicano:        1.1,
+    puntillismo:    1.25,
   };
 
-  // ── Multiplicadores por zona ──────────────────────────────
-  // Zonas dolorosas o difíciles = tarifa adicional
   const ZONA = {
     brazo:    1.0,
     pierna:   1.0,
-    espalda:  1.0,   // zona grande, buen acceso
-    costilla: 1.2,   // muy solicitado extra en estudios andaluces
-    cuello:   1.2,
-    mano:     1.25,  // se borra antes, requiere retoques
-    pie:      1.2,
-    cara:     1.35,
+    espalda:  1.0,
+    costilla: 1.15,
+    cuello:   1.15,
+    mano:     1.2,
+    pie:      1.15,
+    cara:     1.3,
     normal:   1.0,
   };
 
-  let base  = BASE[tamano] || 160;
-  let mult  = (ESTILO[estilo] || 1.0) * (ZONA[zona] || 1.0);
-  let total = base * mult * sesiones;
-  if (extra) total *= 1.12; // color añadido (+12%)
+  const BENEFICIO = 1.15; // 15% margen de beneficio
 
-  // Rango ±12% para dar horquilla realista
-  const min = Math.round(total * 0.88 / 5) * 5;
-  const max = Math.round(total * 1.12 / 5) * 5;
+  let base   = BASE[tamano] || 110;
+  let mult   = (ESTILO[estilo] || 1.0) * (ZONA[zona] || 1.0);
+  let subtotal = base * mult * sesiones;
+  if (extra) subtotal *= 1.1;
+  let total  = subtotal * BENEFICIO; // aplicar margen
 
-  // Calcular tarifa/hora estimada
-  const horasEst = {minimo:0.5,pequeno:1,medio:2.5,grande:5,maxi:9,manga:16};
-  const horas = (horasEst[tamano]||2.5) * sesiones;
-  const tarifaH = Math.round(total / horas);
+  const min = Math.round(subtotal / 5) * 5;  // sin margen
+  const max = Math.round(total / 5) * 5;      // con margen 15%
+
+  const horasEst = {minimo:0.5,pequeno:1,medio:2.2,grande:4.5,maxi:8,manga:15};
+  const horas    = (horasEst[tamano]||2.2) * sesiones;
+  const tarifaH  = Math.round(total / horas);
+  const beneficioEuros = Math.round(total - subtotal);
 
   const res = document.getElementById('calc-resultado');
   if (!res) return;
   res.innerHTML=`
     <div class="calc-precio-wrap">
       <div class="calc-rango">${min} € — ${max} €</div>
-      <div class="calc-label">precio orientativo · mercado andaluz</div>
+      <div class="calc-label">sin / con margen · mercado andaluz · nivel junior</div>
     </div>
     <div class="calc-desglose">
-      <div class="calc-row"><span>Tamaño base</span><span>${base} €</span></div>
+      <div class="calc-row"><span>Precio base (tamaño)</span><span>${base} €</span></div>
       <div class="calc-row"><span>Estilo</span><span>×${(ESTILO[estilo]||1).toFixed(2)}</span></div>
       <div class="calc-row"><span>Zona corporal</span><span>×${(ZONA[zona]||1).toFixed(2)}</span></div>
-      ${sesiones>1?`<div class="calc-row"><span>Sesiones (×${sesiones})</span><span>×${sesiones}</span></div>`:''}
-      ${extra?'<div class="calc-row"><span>Color / detalles extra</span><span>×1.12</span></div>':''}
-      <div class="calc-row"><span>Tiempo estimado</span><span>~${horas<1?'30 min':horas==1?'1 h':horas+' h'}</span></div>
-      <div class="calc-row"><span>Tarifa/hora equiv.</span><span>~${tarifaH} €/h</span></div>
+      ${sesiones>1?`<div class="calc-row"><span>Sesiones</span><span>×${sesiones}</span></div>`:''}
+      ${extra?'<div class="calc-row"><span>Color / detalles extra</span><span>×1.10</span></div>':''}
+      <div class="calc-row"><span>Tiempo estimado</span><span>~${horas<1?'30 min':horas===1?'1 h':horas+' h'}</span></div>
+      <div class="calc-row"><span>Subtotal sin margen</span><span>${Math.round(subtotal)} €</span></div>
+      <div class="calc-row" style="color:#a3e635"><span>+ Margen beneficio (15%)</span><span>+${beneficioEuros} €</span></div>
       <div class="calc-row" style="border-top:1px solid rgba(255,0,149,0.3);padding-top:8px;color:#fff;font-weight:700;">
-        <span>Estimación media</span>
+        <span>Precio final recomendado</span>
         <span style="color:#ff4dc4">${Math.round(total)} €</span>
       </div>
+      <div class="calc-row"><span>Tarifa/hora equivalente</span><span style="color:rgba(255,255,255,0.5)">~${tarifaH} €/h</span></div>
     </div>
     <p style="font-size:.68rem;color:rgba(255,255,255,.3);margin-top:10px;text-align:center;">
-      * Basado en tarifas de estudios de Andalucía (60–80 €/h). El presupuesto final lo decide el artista.
+      * Precios junior (6 meses exp.) · Andalucía · 40–55 €/h base · 15% margen incluido
     </p>`;
 }
 
